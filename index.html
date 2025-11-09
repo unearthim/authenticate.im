@@ -1,500 +1,1034 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificate of Provenance</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
-    <style>
-        :root {
-            --background-color: #0A0E1B;
-            --accent-glow: #7DF9FF;
-            --success-glow: #00FF00;
-            --failure-glow: #FF2D2D;
-            --glitch-magenta: #FF00FF;
-            --glitch-yellow: #FFFF00;
-        }
-
-        body {
-            font-family: 'Share Tech Mono', monospace;
-            background-color: var(--background-color);
-            color: var(--accent-glow);
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            /* Add a subtle background pattern */
-            background-image: linear-gradient(rgba(125, 249, 255, 0.03) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(125, 249, 255, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-
-        .certificate-container {
-            width: 90%;
-            max-width: 600px;
-            padding: 40px;
-            border: 1px solid var(--accent-glow);
-            border-radius: 12px;
-            background: rgba(10, 14, 27, 0.8);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 25px rgba(125, 249, 255, 0.2);
-            text-align: center;
-            transition: all 0.5s ease-in-out;
-            opacity: 1;
-            margin: auto;
-        }
-        
-        .certificate-container.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 10px var(--accent-glow);
-            letter-spacing: 2px;
-        }
-
-        .tagline {
-            font-size: 0.9rem;
-            color: rgba(125, 249, 255, 0.75);
-            margin-bottom: 2.5rem;
-            max-width: 480px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6;
-            letter-spacing: 0.5px;
-        }
-
-        .explanation-section {
-            text-align: left;
-            margin-bottom: 2.5rem;
-            border-top: 1px solid rgba(125, 249, 255, 0.2);
-            padding-top: 1.5rem;
-            max-width: 480px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .explanation-section h2 {
-            font-size: 1.1rem;
-            color: var(--accent-glow);
-            margin-bottom: 1rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .explanation-section p {
-            font-size: 0.85rem;
-            color: rgba(125, 249, 255, 0.75);
-            line-height: 1.7;
-            letter-spacing: 0.5px;
-        }
-
-        .input-field {
-            width: 100%;
-            background-color: transparent;
-            border: 1px solid var(--accent-glow);
-            border-radius: 8px;
-            padding: 12px 16px;
-            color: var(--accent-glow);
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            box-shadow: inset 0 0 10px rgba(125, 249, 255, 0.2);
-            transition: box-shadow 0.3s ease;
-        }
-
-        .input-field::placeholder {
-            color: rgba(125, 249, 255, 0.5);
-        }
-
-        .input-field:focus {
-            outline: none;
-            box-shadow: 0 0 15px rgba(125, 249, 255, 0.5), inset 0 0 10px rgba(125, 249, 255, 0.3);
-        }
-        
-        .action-button {
-            background-color: transparent;
-            border: 1px solid var(--accent-glow);
-            color: var(--accent-glow);
-            padding: 12px 24px;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(125, 249, 255, 0.3);
-        }
-
-        .verify-btn {
-            animation: pulse-glow 3s infinite;
-        }
-        
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 10px rgba(125, 249, 255, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(125, 249, 255, 0.6); }
-        }
-
-        .action-button:hover, .action-button:focus {
-            background-color: rgba(125, 249, 255, 0.1);
-            box-shadow: 0 0 20px rgba(125, 249, 255, 0.6) !important; /* Override pulse */
-        }
-        
-        .action-button:disabled {
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-        
-        .reset-btn {
-            border-color: var(--success-glow);
-            color: var(--success-glow);
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
-            margin-top: 1.5rem;
-            opacity: 0;
-            transition: opacity 0.5s ease 1s; /* Fade in after icon animation */
-        }
-        
-        .reset-btn.visible {
-            opacity: 1;
-        }
-        
-        .reset-btn.failure {
-            border-color: var(--failure-glow);
-            color: var(--failure-glow);
-            box-shadow: 0 0 10px rgba(255, 45, 45, 0.3);
-        }
-
-        #verification-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            display: none;
-            background: rgba(10, 14, 27, 0.8);
-        }
-
-        #result-container {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 240px;
-        }
-        
-        #result-text {
-            font-size: 1.1rem;
-            color: var(--success-glow);
-            text-shadow: 0 0 10px var(--success-glow);
-            white-space: pre-wrap;
-            word-break: break-all;
-            line-height: 1.6;
-        }
-
-        #result-text.failure {
-            color: var(--failure-glow);
-            text-shadow: 0 0 10px var(--failure-glow);
-        }
-
-        .typing-cursor {
-            display: inline-block;
-            width: 10px;
-            height: 1.2rem;
-            background-color: var(--success-glow);
-            animation: blink 0.7s infinite;
-        }
-
-        #result-text.failure .typing-cursor {
-            background-color: var(--failure-glow);
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-        
-        .icon {
-            margin-top: 1.5rem;
-            width: 50px;
-            height: 50px;
-            fill: none;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
-        }
-        
-        .icon.visible {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        #success-icon {
-            stroke: var(--success-glow);
-            stroke-width: 2;
-            filter: drop-shadow(0 0 5px var(--success-glow));
-        }
-
-        #success-icon .check {
-            stroke-dasharray: 100;
-            stroke-dashoffset: 100;
-            animation: draw-check 0.8s ease-out forwards;
-        }
-
-        @keyframes draw-check { to { stroke-dashoffset: 0; } }
-
-        #failure-icon {
-            stroke: var(--failure-glow);
-            stroke-width: 2;
-            filter: drop-shadow(0 0 5px var(--failure-glow));
-        }
-        
-        #failure-icon.glitching {
-            animation: jitter 0.1s infinite steps(1, end);
-        }
-
-        @keyframes jitter {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(2px, -1px) scale(1.02); }
-            50% { transform: translate(-1px, 2px) scale(0.98); }
-            75% { transform: translate(1px, -2px) scale(1); }
-        }
-
-        #failure-icon .cross {
-            stroke-dasharray: 29;
-            stroke-dashoffset: 29;
-            animation: draw-cross 0.5s ease-out forwards;
-        }
-        #failure-icon .cross:nth-of-type(2) {
-            animation-delay: 0.1s;
-        }
-
-        @keyframes draw-cross { to { stroke-dashoffset: 0; } }
-
-        .hidden { display: none; }
-
-        #page-footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(125, 249, 255, 0.2);
-            text-align: center;
-            color: rgba(125, 249, 255, 0.5);
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-        }
-
-        .footer-link {
-            color: rgba(125, 249, 255, 0.7);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .footer-link:hover {
-            color: var(--accent-glow);
-            text-shadow: 0 0 5px var(--accent-glow);
-        }
-    </style>
-</head>
-<body>
-    <canvas id="verification-canvas"></canvas>
-
-    <div id="certificate-container" class="certificate-container">
-        <h1>Certificate of Provenance</h1>
-        <p class="tagline">
-            Authenticate.im visualizes cryptographic verification. This certificate provides immutable proof of provenance for a digital asset by validating its unique identifier.
-        </p>
-        
-        <div class="explanation-section">
-            <h2>The Imperative for Immutable Proof</h2>
-            <p>
-                In the digital age, true ownership is fragile. Traditional verification relies on centralized authorities, creating single points of failure susceptible to manipulation and fraud. Certificates can be forged, records altered, and digital identities compromised.
-                <br><br>
-                Cryptographic verification represents a paradigm shift. By creating unchangeable, publicly verifiable records, we establish a new foundation for a secure and transparent digital world—where identity and ownership are absolute.
-            </p>
-        </div>
-
-        <div id="verification-form">
-            <input type="text" id="token-input" class="input-field" placeholder="Enter any text to see it fail, or generate a valid token">
-            <button id="verify-button" class="action-button verify-btn">Verify</button>
-            <div id="generate-token-container" class="mt-6 text-center">
-                <button id="generate-token-btn" class="text-sm text-cyan-400/70 hover:text-cyan-400 transition-colors underline">
-                    Generate a valid token for this demo
-                </button>
-                <p id="generated-token-display" class="mt-2 text-xs text-cyan-400/80 h-6 break-all"></p>
-            </div>
-        </div>
-
-        <div id="result-container">
-            <p id="result-text"></p>
-            <svg id="success-icon" class="icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                <circle cx="26" cy="26" r="25" fill="none"/>
-                <path class="check" d="M14 27l5.917 4.93L38.083 22" fill="none"/>
-            </svg>
-            <svg id="failure-icon" class="icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                <circle cx="26" cy="26" r="25" fill="none"/>
-                <path class="cross" d="M16 16 36 36" fill="none"/>
-                <path class="cross" d="M36 16 16 36" fill="none"/>
-            </svg>
-            <button id="reset-button" class="action-button reset-btn">Verify Another</button>
-        </div>
-
-        <footer id="page-footer">
-            digital monument by <a href="https://unearth.im" target="_blank" rel="noopener noreferrer" class="footer-link">unearth.im</a>
-        </footer>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // DOM Elements
-            const certificateContainer = document.getElementById('certificate-container');
-            const form = document.getElementById('verification-form');
-            const resultContainer = document.getElementById('result-container');
-            const verifyButton = document.getElementById('verify-button');
-            const tokenInput = document.getElementById('token-input');
-            const generateTokenBtn = document.getElementById('generate-token-btn');
-            const tokenDisplay = document.getElementById('generated-token-display');
-            const resultText = document.getElementById('result-text');
-            const successIcon = document.getElementById('success-icon');
-            const failureIcon = document.getElementById('failure-icon');
-            const resetButton = document.getElementById('reset-button');
-            
-            // Canvas Elements
-            const canvas = document.getElementById('verification-canvas');
-            const ctx = canvas.getContext('2d');
-            let animationFrameId;
-
-            let validToken = null;
-            let lastVerifiedToken = '';
-
-            // --- Sound Design ---
-            let soundsReady = false;
-            let synths = {};
-
-            function initializeSounds() {
-                synths.tick = new Tone.Synth({ oscillator: { type: "sine" }, envelope: { attack: 0.005, decay: 0.1, sustain: 0, release: 0.1 } }).toDestination();
-                synths.hover = new Tone.MembraneSynth({ pitchDecay: 0.008, octaves: 4, envelope: { attack: 0.001, decay: 0.2, sustain: 0 } }).toDestination();
-                synths.success = new Tone.PolySynth(Tone.Synth, { oscillator: { type: "triangle" }, envelope: { attack: 0.005, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
-                synths.failure = new Tone.NoiseSynth({ noise: { type: 'pink' }, envelope: { attack: 0.005, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
-                soundsReady = true;
-            }
-
-            document.body.addEventListener('click', () => {
-                if (Tone.context.state !== 'running') {
-                    Tone.start().then(initializeSounds);
-                }
-            }, { once: true });
-            
-            tokenInput.addEventListener('focus', () => soundsReady && synths.tick.triggerAttackRelease("C5", "8n"));
-            verifyButton.addEventListener('mouseenter', () => soundsReady && synths.hover.triggerAttackRelease("C2", "8n"));
-            generateTokenBtn.addEventListener('mouseenter', () => soundsReady && synths.hover.triggerAttackRelease("C2", "8n"));
-
-
-            // Canvas setup
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
-
-            // --- Animation Logic ---
-            let particles = [], checkmarks = [], redXs = [];
-            class Particle { constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*2+1;this.speedX=Math.random()*3-1.5;this.speedY=Math.random()*3-1.5;this.color='#7DF9FF'}update(){this.x+=this.speedX;this.y+=this.speedY;if(this.size>0.2)this.size-=0.1}draw(){ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill()}}
-            class Checkmark { constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*10+10;this.opacity=1;this.life=0}draw(){ctx.save();ctx.strokeStyle=`rgba(0, 255, 0, ${this.opacity})`;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(this.x,this.y);ctx.lineTo(this.x+this.size*.4,this.y+this.size*.4);ctx.lineTo(this.x+this.size,this.y-this.size*.3);ctx.stroke();ctx.restore()}update(){this.life++;if(this.life>20)this.opacity-=.05}}
-            class RedX { constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*15+10;this.opacity=1;this.life=0}draw(){ctx.save();ctx.strokeStyle=`rgba(255,45,45,${this.opacity})`;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(this.x-this.size/2,this.y-this.size/2);ctx.lineTo(this.x+this.size/2,this.y+this.size/2);ctx.moveTo(this.x+this.size/2,this.y-this.size/2);ctx.lineTo(this.x-this.size/2,this.y+this.size/2);ctx.stroke();ctx.restore()}update(){this.life++;if(this.life>20)this.opacity-=.05}}
-            function handleParticles(){for(let i=0;i<5;i++){particles.push(new Particle())}for(let i=0;i<particles.length;i++){particles[i].update();particles[i].draw();for(let j=i;j<particles.length;j++){const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,distance=Math.sqrt(dx*dx+dy*dy);if(distance<100){ctx.beginPath();ctx.strokeStyle=particles[i].color;ctx.lineWidth=.2;ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.stroke()}}if(particles[i].size<=.2){particles.splice(i,1);i--}}}
-            function handleCheckmarks(){if(checkmarks.length<50&&Math.random()>.5){checkmarks.push(new Checkmark())}for(let i=0;i<checkmarks.length;i++){checkmarks[i].update();checkmarks[i].draw();if(checkmarks[i].opacity<=0){checkmarks.splice(i,1);i--}}}
-            function handleRedXs(){if(redXs.length<50&&Math.random()>.5){redXs.push(new RedX())}for(let i=0;i<redXs.length;i++){redXs[i].update();redXs[i].draw();if(redXs[i].opacity<=0){redXs.splice(i,1);i--}}}
-            function handleGlitchEffect() {
-                for (let i = 0; i < 5; i++) {
-                    const y = Math.random() * canvas.height;
-                    const h = Math.random() * 20 + 1;
-                    const xOffset = (Math.random() - 0.5) * 40;
-                    try { const imageData = ctx.getImageData(0, y, canvas.width, h); ctx.clearRect(0, y, canvas.width, h); ctx.putImageData(imageData, xOffset, y); } catch (e) { /* ignore security errors */ }
-                }
-                if (Math.random() > 0.9) { ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255, 0, 255, 0.1)' : 'rgba(255, 255, 0, 0.1)'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
-            }
-            
-            let animationPhase = '', phaseTimer = 0, verificationResult = true;
-            function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);phaseTimer++;if(animationPhase==='handshake'){handleParticles();if(phaseTimer>120){phaseTimer=0;animationPhase=verificationResult?'cascade':'failure'}}else if(animationPhase==='cascade'){handleCheckmarks();if(phaseTimer>150){stopAnimationAndShowResult();return}}else if(animationPhase==='failure'){handleRedXs();handleGlitchEffect();if(phaseTimer>150){stopAnimationAndShowResult();return}}animationFrameId=requestAnimationFrame(animate)}
-            function startAnimation(isValid){verificationResult=isValid;verifyButton.disabled=true;verifyButton.textContent='Verifying...';certificateContainer.classList.add('hidden');setTimeout(()=>{canvas.style.display='block';animationPhase='handshake';phaseTimer=0;particles=[];checkmarks=[];redXs=[];animate()},500)}
-            function stopAnimationAndShowResult(){cancelAnimationFrame(animationFrameId);canvas.style.display='none';certificateContainer.classList.remove('hidden');form.style.display = 'none';showResult(verificationResult)}
-
-            // --- Typewriter Effect ---
-            function typeWriter(text, isSuccess, i = 0) {
-                if(i===0){resultText.innerHTML='';const c=document.createElement('span');c.className='typing-cursor';resultText.appendChild(c)}
-                if(i<text.length){const c=document.querySelector('.typing-cursor');resultText.insertBefore(document.createTextNode(text.charAt(i)),c);setTimeout(()=>typeWriter(text,isSuccess,i+1),50)}else{const c=document.querySelector('.typing-cursor');if(c)c.remove();setTimeout(()=>{if(isSuccess){successIcon.classList.remove('hidden');successIcon.classList.add('visible');if(soundsReady)synths.success.triggerAttackRelease(["C4","E4","G4"],"4n")}else{failureIcon.classList.remove('hidden');failureIcon.classList.add('visible','glitching');if(soundsReady)synths.failure.triggerAttackRelease("2n")}resetButton.classList.add('visible')},300)}}
-
-            // --- Main Logic ---
-            function showResult(isSuccess) {
-                resultContainer.style.display = 'flex';
-                resultText.classList.remove('failure');
-                resetButton.classList.remove('failure');
-                successIcon.classList.add('hidden');
-                failureIcon.classList.add('hidden');
-                
-                let validationText;
-                if(isSuccess){validationText = `Token Verified:\n${lastVerifiedToken}\n\nThis token is valid.`}
-                else{validationText = `Integrity Check Failed: Incoherent Data Stream\n\nToken provided:\n${lastVerifiedToken}\n\nPlease enter a valid token to restore system coherence.`;resultText.classList.add('failure');resetButton.classList.add('failure')}
-                typeWriter(validationText, isSuccess);
-            }
-            
-            function resetState() {
-                resultContainer.style.display = 'none';
-                successIcon.classList.remove('visible');
-                failureIcon.classList.remove('visible', 'glitching');
-                successIcon.classList.add('hidden');
-                failureIcon.classList.add('hidden');
-                resetButton.classList.remove('visible');
-                resultText.innerHTML = '';
-                form.style.display = 'block';
-                verifyButton.disabled = false;
-                verifyButton.textContent = 'Verify';
-                tokenInput.value = '';
-                validToken = null; // Invalidate the token
-                tokenDisplay.textContent = '';
-            }
-
-            function generateNewToken() {
-                const chars = 'abcdef0123456789';
-                let token = '0x';
-                for (let i = 0; i < 40; i++) { token += chars.charAt(Math.floor(Math.random() * chars.length)); }
-                return token;
-            }
-
-            generateTokenBtn.addEventListener('click', () => {
-                if (soundsReady) synths.tick.triggerAttackRelease("C5", "8n");
-                validToken = generateNewToken();
-                tokenDisplay.textContent = validToken;
-                tokenInput.value = validToken;
-            });
-
-            verifyButton.addEventListener('click', () => {
-                const tokenId = tokenInput.value.trim();
-                if (!tokenId) {
-                    tokenInput.style.borderColor = 'var(--failure-glow)';
-                    setTimeout(() => { tokenInput.style.borderColor = '' }, 1000);
-                    return;
-                }
-                lastVerifiedToken = tokenId;
-                if(soundsReady) synths.tick.triggerAttackRelease("C6", "8n");
-                const isValid = (tokenId === validToken && tokenId !== null);
-                startAnimation(isValid);
-            });
-            
-            resetButton.addEventListener('click', () => {
-                if(soundsReady) synths.tick.triggerAttackRelease("C5", "8n");
-                resetState();
-            });
-        });
-    </script>
-</body>
-</html>
-
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <!-- === 1. Primary Meta Tags === -->
+    <title>Certificate of Provenance | Authenticate.im</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="Certificate of Provenance | Authenticate.im">
+    <meta name="description" content="Authenticate.im visualizes cryptographic verification, providing immutable proof of provenance for digital assets by validating their unique identifiers.">
+    <meta name="keywords" content="cryptographic verification, provenance, digital asset, authentication, immutable proof, NFT, blockchain, security, transparency">
+    <meta name="author" content="authenticate.im (An unearth.im Project)">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    
+    <!--- NON-NEGOTIABLE AND IMPORTANT:CANONICAL LINKS: if page-url.html is index.html, no need to attach it at the end of link--->
+    <link rel="canonical" href="https://authenticate.im" />
+  
+    <!-- === 2. Webmention Endpoint === -->
+    <link rel="webmention" href="https://webmention.io/unearth.im/webmention" />
+
+    <!-- === 3. Open Graph / Facebook === -->
+    <meta property="og:type" content="website"> 
+    <meta property="og:url" content="https://authenticate.im/">
+    <meta property="og:title" content="Certificate of Provenance | Authenticate.im">
+    <meta property="og:description" content="Authenticate.im visualizes cryptographic verification, providing immutable proof of provenance for digital assets by validating their unique identifiers.">
+    <meta property="og:image" content="https://authenticate.im/og-image.png">
+    <meta property="og:site_name" content="Authenticate.im">
+
+    <!-- === 4. Twitter Card === -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://authenticate.im/">
+    <meta property="twitter:title" content="Certificate of Provenance | Authenticate.im">
+    <meta property="twitter:description" content="Authenticate.im visualizes cryptographic verification, providing immutable proof of provenance for digital assets by validating their unique identifiers.">
+    <meta property="twitter:image" content="https://authenticate.im/og-image.png">
+
+    <!-- === 5. Favicons === -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <!-- Brand Color Meta Tags -->
+    <meta name="theme-color" content="#0A0E1B">
+    <meta name="msapplication-TileColor" content="#7DF9FF">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+
+    <style>
+
+        :root {
+
+            --background-color: #0A0E1B;
+
+            --accent-glow: #7DF9FF;
+
+            --success-glow: #00FF00;
+
+            --failure-glow: #FF2D2D;
+
+            --glitch-magenta: #FF00FF;
+
+            --glitch-yellow: #FFFF00;
+
+        }
+
+
+
+        body {
+
+            font-family: 'Share Tech Mono', monospace;
+
+            background-color: var(--background-color);
+
+            color: var(--accent-glow);
+
+            display: flex;
+
+            justify-content: center;
+
+            min-height: 100vh;
+
+            margin: 0;
+
+            /* Add a subtle background pattern */
+
+            background-image: linear-gradient(rgba(125, 249, 255, 0.03) 1px, transparent 1px),
+
+                              linear-gradient(90deg, rgba(125, 249, 255, 0.03) 1px, transparent 1px);
+
+            background-size: 20px 20px;
+
+        }
+
+
+
+        .certificate-container {
+
+            width: 90%;
+
+            max-width: 600px;
+
+            padding: 40px;
+
+            border: 1px solid var(--accent-glow);
+
+            border-radius: 12px;
+
+            background: rgba(10, 14, 27, 0.8);
+
+            backdrop-filter: blur(10px);
+
+            box-shadow: 0 0 25px rgba(125, 249, 255, 0.2);
+
+            text-align: center;
+
+            transition: all 0.5s ease-in-out;
+
+            opacity: 1;
+
+            margin: auto;
+
+        }
+
+        
+
+        .certificate-container.hidden {
+
+            opacity: 0;
+
+            pointer-events: none;
+
+        }
+
+
+
+        h1 {
+
+            font-size: 2rem;
+
+            margin-bottom: 1rem;
+
+            text-shadow: 0 0 10px var(--accent-glow);
+
+            letter-spacing: 2px;
+
+        }
+
+
+
+        .tagline {
+
+            font-size: 0.9rem;
+
+            color: rgba(125, 249, 255, 0.75);
+
+            margin-bottom: 2.5rem;
+
+            max-width: 480px;
+
+            margin-left: auto;
+
+            margin-right: auto;
+
+            line-height: 1.6;
+
+            letter-spacing: 0.5px;
+
+        }
+
+
+
+        .explanation-section {
+
+            text-align: left;
+
+            margin-bottom: 2.5rem;
+
+            border-top: 1px solid rgba(125, 249, 255, 0.2);
+
+            padding-top: 1.5rem;
+
+            max-width: 480px;
+
+            margin-left: auto;
+
+            margin-right: auto;
+
+        }
+
+
+
+        .explanation-section h2 {
+
+            font-size: 1.1rem;
+
+            color: var(--accent-glow);
+
+            margin-bottom: 1rem;
+
+            letter-spacing: 1px;
+
+            text-transform: uppercase;
+
+        }
+
+
+
+        .explanation-section p {
+
+            font-size: 0.85rem;
+
+            color: rgba(125, 249, 255, 0.75);
+
+            line-height: 1.7;
+
+            letter-spacing: 0.5px;
+
+        }
+
+
+
+        .input-field {
+
+            width: 100%;
+
+            background-color: transparent;
+
+            border: 1px solid var(--accent-glow);
+
+            border-radius: 8px;
+
+            padding: 12px 16px;
+
+            color: var(--accent-glow);
+
+            font-family: 'Share Tech Mono', monospace;
+
+            font-size: 1rem;
+
+            margin-bottom: 1.5rem;
+
+            box-shadow: inset 0 0 10px rgba(125, 249, 255, 0.2);
+
+            transition: box-shadow 0.3s ease;
+
+        }
+
+
+
+        .input-field::placeholder {
+
+            color: rgba(125, 249, 255, 0.5);
+
+        }
+
+
+
+        .input-field:focus {
+
+            outline: none;
+
+            box-shadow: 0 0 15px rgba(125, 249, 255, 0.5), inset 0 0 10px rgba(125, 249, 255, 0.3);
+
+        }
+
+        
+
+        .action-button {
+
+            background-color: transparent;
+
+            border: 1px solid var(--accent-glow);
+
+            color: var(--accent-glow);
+
+            padding: 12px 24px;
+
+            font-family: 'Share Tech Mono', monospace;
+
+            font-size: 1rem;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            transition: all 0.3s ease;
+
+            box-shadow: 0 0 10px rgba(125, 249, 255, 0.3);
+
+        }
+
+
+
+        .verify-btn {
+
+            animation: pulse-glow 3s infinite;
+
+        }
+
+        
+
+        @keyframes pulse-glow {
+
+            0%, 100% { box-shadow: 0 0 10px rgba(125, 249, 255, 0.3); }
+
+            50% { box-shadow: 0 0 20px rgba(125, 249, 255, 0.6); }
+
+        }
+
+
+
+        .action-button:hover, .action-button:focus {
+
+            background-color: rgba(125, 249, 255, 0.1);
+
+            box-shadow: 0 0 20px rgba(125, 249, 255, 0.6) !important; /* Override pulse */
+
+        }
+
+        
+
+        .action-button:disabled {
+
+            cursor: not-allowed;
+
+            opacity: 0.5;
+
+        }
+
+        
+
+        .reset-btn {
+
+            border-color: var(--success-glow);
+
+            color: var(--success-glow);
+
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+
+            margin-top: 1.5rem;
+
+            opacity: 0;
+
+            transition: opacity 0.5s ease 1s; /* Fade in after icon animation */
+
+        }
+
+        
+
+        .reset-btn.visible {
+
+            opacity: 1;
+
+        }
+
+        
+
+        .reset-btn.failure {
+
+            border-color: var(--failure-glow);
+
+            color: var(--failure-glow);
+
+            box-shadow: 0 0 10px rgba(255, 45, 45, 0.3);
+
+        }
+
+
+
+        #verification-canvas {
+
+            position: absolute;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            z-index: 10;
+
+            display: none;
+
+            background: rgba(10, 14, 27, 0.8);
+
+        }
+
+
+
+        #result-container {
+
+            display: none;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 240px;
+
+        }
+
+        
+
+        #result-text {
+
+            font-size: 1.1rem;
+
+            color: var(--success-glow);
+
+            text-shadow: 0 0 10px var(--success-glow);
+
+            white-space: pre-wrap;
+
+            word-break: break-all;
+
+            line-height: 1.6;
+
+        }
+
+
+
+        #result-text.failure {
+
+            color: var(--failure-glow);
+
+            text-shadow: 0 0 10px var(--failure-glow);
+
+        }
+
+
+
+        .typing-cursor {
+
+            display: inline-block;
+
+            width: 10px;
+
+            height: 1.2rem;
+
+            background-color: var(--success-glow);
+
+            animation: blink 0.7s infinite;
+
+        }
+
+
+
+        #result-text.failure .typing-cursor {
+
+            background-color: var(--failure-glow);
+
+        }
+
+
+
+        @keyframes blink {
+
+            0%, 100% { opacity: 1; }
+
+            50% { opacity: 0; }
+
+        }
+
+        
+
+        .icon {
+
+            margin-top: 1.5rem;
+
+            width: 50px;
+
+            height: 50px;
+
+            fill: none;
+
+            opacity: 0;
+
+            transform: scale(0.5);
+
+            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+
+        }
+
+        
+
+        .icon.visible {
+
+            opacity: 1;
+
+            transform: scale(1);
+
+        }
+
+
+
+        #success-icon {
+
+            stroke: var(--success-glow);
+
+            stroke-width: 2;
+
+            filter: drop-shadow(0 0 5px var(--success-glow));
+
+        }
+
+
+
+        #success-icon .check {
+
+            stroke-dasharray: 100;
+
+            stroke-dashoffset: 100;
+
+            animation: draw-check 0.8s ease-out forwards;
+
+        }
+
+
+
+        @keyframes draw-check { to { stroke-dashoffset: 0; } }
+
+
+
+        #failure-icon {
+
+            stroke: var(--failure-glow);
+
+            stroke-width: 2;
+
+            filter: drop-shadow(0 0 5px var(--failure-glow));
+
+        }
+
+        
+
+        #failure-icon.glitching {
+
+            animation: jitter 0.1s infinite steps(1, end);
+
+        }
+
+
+
+        @keyframes jitter {
+
+            0%, 100% { transform: translate(0, 0) scale(1); }
+
+            25% { transform: translate(2px, -1px) scale(1.02); }
+
+            50% { transform: translate(-1px, 2px) scale(0.98); }
+
+            75% { transform: translate(1px, -2px) scale(1); }
+
+        }
+
+
+
+        #failure-icon .cross {
+
+            stroke-dasharray: 29;
+
+            stroke-dashoffset: 29;
+
+            animation: draw-cross 0.5s ease-out forwards;
+
+        }
+
+        #failure-icon .cross:nth-of-type(2) {
+
+            animation-delay: 0.1s;
+
+        }
+
+
+
+        @keyframes draw-cross { to { stroke-dashoffset: 0; } }
+
+
+
+        .hidden { display: none; }
+
+
+
+        #page-footer {
+
+            margin-top: 40px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid rgba(125, 249, 255, 0.2);
+
+            text-align: center;
+
+            color: rgba(125, 249, 255, 0.5);
+
+            font-size: 0.8rem;
+
+            letter-spacing: 1px;
+
+        }
+
+
+
+        .footer-link {
+
+            color: rgba(125, 249, 255, 0.7);
+
+            text-decoration: none;
+
+            transition: all 0.3s ease;
+
+        }
+
+
+
+        .footer-link:hover {
+
+            color: var(--accent-glow);
+
+            text-shadow: 0 0 5px var(--accent-glow);
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <canvas id="verification-canvas"></canvas>
+
+
+
+    <div id="certificate-container" class="certificate-container">
+
+        <h1>Certificate of Provenance</h1>
+
+        <p class="tagline">
+
+            Authenticate.im visualizes cryptographic verification. This certificate provides immutable proof of provenance for a digital asset by validating its unique identifier.
+
+        </p>
+
+        
+
+        <div class="explanation-section">
+
+            <h2>The Imperative for Immutable Proof</h2>
+
+            <p>
+
+                In the digital age, true ownership is fragile. Traditional verification relies on centralized authorities, creating single points of failure susceptible to manipulation and fraud. Certificates can be forged, records altered, and digital identities compromised.
+
+                <br><br>
+
+                Cryptographic verification represents a paradigm shift. By creating unchangeable, publicly verifiable records, we establish a new foundation for a secure and transparent digital world—where identity and ownership are absolute.
+
+            </p>
+
+        </div>
+
+
+
+        <div id="verification-form">
+
+            <input type="text" id="token-input" class="input-field" placeholder="Enter any text to see it fail, or generate a valid token">
+
+            <button id="verify-button" class="action-button verify-btn">Verify</button>
+
+            <div id="generate-token-container" class="mt-6 text-center">
+
+                <button id="generate-token-btn" class="text-sm text-cyan-400/70 hover:text-cyan-400 transition-colors underline">
+
+                    Generate a valid token for this demo
+
+                </button>
+
+                <p id="generated-token-display" class="mt-2 text-xs text-cyan-400/80 h-6 break-all"></p>
+
+            </div>
+
+        </div>
+
+
+
+        <div id="result-container">
+
+            <p id="result-text"></p>
+
+            <svg id="success-icon" class="icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+
+                <circle cx="26" cy="26" r="25" fill="none"/>
+
+                <path class="check" d="M14 27l5.917 4.93L38.083 22" fill="none"/>
+
+            </svg>
+
+            <svg id="failure-icon" class="icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+
+                <circle cx="26" cy="26" r="25" fill="none"/>
+
+                <path class="cross" d="M16 16 36 36" fill="none"/>
+
+                <path class="cross" d="M36 16 16 36" fill="none"/>
+
+            </svg>
+
+            <button id="reset-button" class="action-button reset-btn">Verify Another</button>
+
+        </div>
+
+
+
+        <footer id="page-footer">
+
+            digital monument by <a href="https://unearth.im" target="_blank" rel="noopener noreferrer" class="footer-link">unearth.im</a>
+
+        </footer>
+
+    </div>
+
+
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // DOM Elements
+
+            const certificateContainer = document.getElementById('certificate-container');
+
+            const form = document.getElementById('verification-form');
+
+            const resultContainer = document.getElementById('result-container');
+
+            const verifyButton = document.getElementById('verify-button');
+
+            const tokenInput = document.getElementById('token-input');
+
+            const generateTokenBtn = document.getElementById('generate-token-btn');
+
+            const tokenDisplay = document.getElementById('generated-token-display');
+
+            const resultText = document.getElementById('result-text');
+
+            const successIcon = document.getElementById('success-icon');
+
+            const failureIcon = document.getElementById('failure-icon');
+
+            const resetButton = document.getElementById('reset-button');
+
+            
+
+            // Canvas Elements
+
+            const canvas = document.getElementById('verification-canvas');
+
+            const ctx = canvas.getContext('2d');
+
+            let animationFrameId;
+
+
+
+            let validToken = null;
+
+            let lastVerifiedToken = '';
+
+
+
+            // --- Sound Design ---
+
+            let soundsReady = false;
+
+            let synths = {};
+
+
+
+            function initializeSounds() {
+
+                synths.tick = new Tone.Synth({ oscillator: { type: "sine" }, envelope: { attack: 0.005, decay: 0.1, sustain: 0, release: 0.1 } }).toDestination();
+
+                synths.hover = new Tone.MembraneSynth({ pitchDecay: 0.008, octaves: 4, envelope: { attack: 0.001, decay: 0.2, sustain: 0 } }).toDestination();
+
+                synths.success = new Tone.PolySynth(Tone.Synth, { oscillator: { type: "triangle" }, envelope: { attack: 0.005, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
+
+                synths.failure = new Tone.NoiseSynth({ noise: { type: 'pink' }, envelope: { attack: 0.005, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
+
+                soundsReady = true;
+
+            }
+
+
+
+            document.body.addEventListener('click', () => {
+
+                if (Tone.context.state !== 'running') {
+
+                    Tone.start().then(initializeSounds);
+
+                }
+
+            }, { once: true });
+
+            
+
+            tokenInput.addEventListener('focus', () => soundsReady && synths.tick.triggerAttackRelease("C5", "8n"));
+
+            verifyButton.addEventListener('mouseenter', () => soundsReady && synths.hover.triggerAttackRelease("C2", "8n"));
+
+            generateTokenBtn.addEventListener('mouseenter', () => soundsReady && synths.hover.triggerAttackRelease("C2", "8n"));
+
+
+
+
+
+            // Canvas setup
+
+            function resizeCanvas() {
+
+                canvas.width = window.innerWidth;
+
+                canvas.height = window.innerHeight;
+
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+
+            resizeCanvas();
+
+
+
+            // --- Animation Logic ---
+
+            let particles = [], checkmarks = [], redXs = [];
+
+            class Particle { constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*2+1;this.speedX=Math.random()*3-1.5;this.speedY=Math.random()*3-1.5;this.color='#7DF9FF'}update(){this.x+=this.speedX;this.y+=this.speedY;if(this.size>0.2)this.size-=0.1}draw(){ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill()}}
+
+            class Checkmark { constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*10+10;this.opacity=1;this.life=0}draw(){ctx.save();ctx.strokeStyle=`rgba(0, 255, 0, ${this.opacity})`;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(this.x,this.y);ctx.lineTo(this.x+this.size*.4,this.y+this.size*.4);ctx.lineTo(this.x+this.size,this.y-this.size*.3);ctx.stroke();ctx.restore()}update(){this.life++;if(this.life>20)this.opacity-=.05}}
+
+            class RedX { constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*15+10;this.opacity=1;this.life=0}draw(){ctx.save();ctx.strokeStyle=`rgba(255,45,45,${this.opacity})`;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(this.x-this.size/2,this.y-this.size/2);ctx.lineTo(this.x+this.size/2,this.y+this.size/2);ctx.moveTo(this.x+this.size/2,this.y-this.size/2);ctx.lineTo(this.x-this.size/2,this.y+this.size/2);ctx.stroke();ctx.restore()}update(){this.life++;if(this.life>20)this.opacity-=.05}}
+
+            function handleParticles(){for(let i=0;i<5;i++){particles.push(new Particle())}for(let i=0;i<particles.length;i++){particles[i].update();particles[i].draw();for(let j=i;j<particles.length;j++){const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,distance=Math.sqrt(dx*dx+dy*dy);if(distance<100){ctx.beginPath();ctx.strokeStyle=particles[i].color;ctx.lineWidth=.2;ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.stroke()}}if(particles[i].size<=.2){particles.splice(i,1);i--}}}
+
+            function handleCheckmarks(){if(checkmarks.length<50&&Math.random()>.5){checkmarks.push(new Checkmark())}for(let i=0;i<checkmarks.length;i++){checkmarks[i].update();checkmarks[i].draw();if(checkmarks[i].opacity<=0){checkmarks.splice(i,1);i--}}}
+
+            function handleRedXs(){if(redXs.length<50&&Math.random()>.5){redXs.push(new RedX())}for(let i=0;i<redXs.length;i++){redXs[i].update();redXs[i].draw();if(redXs[i].opacity<=0){redXs.splice(i,1);i--}}}
+
+            function handleGlitchEffect() {
+
+                for (let i = 0; i < 5; i++) {
+
+                    const y = Math.random() * canvas.height;
+
+                    const h = Math.random() * 20 + 1;
+
+                    const xOffset = (Math.random() - 0.5) * 40;
+
+                    try { const imageData = ctx.getImageData(0, y, canvas.width, h); ctx.clearRect(0, y, canvas.width, h); ctx.putImageData(imageData, xOffset, y); } catch (e) { /* ignore security errors */ }
+
+                }
+
+                if (Math.random() > 0.9) { ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255, 0, 255, 0.1)' : 'rgba(255, 255, 0, 0.1)'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+
+            }
+
+            
+
+            let animationPhase = '', phaseTimer = 0, verificationResult = true;
+
+            function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);phaseTimer++;if(animationPhase==='handshake'){handleParticles();if(phaseTimer>120){phaseTimer=0;animationPhase=verificationResult?'cascade':'failure'}}else if(animationPhase==='cascade'){handleCheckmarks();if(phaseTimer>150){stopAnimationAndShowResult();return}}else if(animationPhase==='failure'){handleRedXs();handleGlitchEffect();if(phaseTimer>150){stopAnimationAndShowResult();return}}animationFrameId=requestAnimationFrame(animate)}
+
+            function startAnimation(isValid){verificationResult=isValid;verifyButton.disabled=true;verifyButton.textContent='Verifying...';certificateContainer.classList.add('hidden');setTimeout(()=>{canvas.style.display='block';animationPhase='handshake';phaseTimer=0;particles=[];checkmarks=[];redXs=[];animate()},500)}
+
+            function stopAnimationAndShowResult(){cancelAnimationFrame(animationFrameId);canvas.style.display='none';certificateContainer.classList.remove('hidden');form.style.display = 'none';showResult(verificationResult)}
+
+
+
+            // --- Typewriter Effect ---
+
+            function typeWriter(text, isSuccess, i = 0) {
+
+                if(i===0){resultText.innerHTML='';const c=document.createElement('span');c.className='typing-cursor';resultText.appendChild(c)}
+
+                if(i<text.length){const c=document.querySelector('.typing-cursor');resultText.insertBefore(document.createTextNode(text.charAt(i)),c);setTimeout(()=>typeWriter(text,isSuccess,i+1),50)}else{const c=document.querySelector('.typing-cursor');if(c)c.remove();setTimeout(()=>{if(isSuccess){successIcon.classList.remove('hidden');successIcon.classList.add('visible');if(soundsReady)synths.success.triggerAttackRelease(["C4","E4","G4"],"4n")}else{failureIcon.classList.remove('hidden');failureIcon.classList.add('visible','glitching');if(soundsReady)synths.failure.triggerAttackRelease("2n")}resetButton.classList.add('visible')},300)}}
+
+
+
+            // --- Main Logic ---
+
+            function showResult(isSuccess) {
+
+                resultContainer.style.display = 'flex';
+
+                resultText.classList.remove('failure');
+
+                resetButton.classList.remove('failure');
+
+                successIcon.classList.add('hidden');
+
+                failureIcon.classList.add('hidden');
+
+                
+
+                let validationText;
+
+                if(isSuccess){validationText = `Token Verified:\n${lastVerifiedToken}\n\nThis token is valid.`}
+
+                else{validationText = `Integrity Check Failed: Incoherent Data Stream\n\nToken provided:\n${lastVerifiedToken}\n\nPlease enter a valid token to restore system coherence.`;resultText.classList.add('failure');resetButton.classList.add('failure')}
+
+                typeWriter(validationText, isSuccess);
+
+            }
+
+            
+
+            function resetState() {
+
+                resultContainer.style.display = 'none';
+
+                successIcon.classList.remove('visible');
+
+                failureIcon.classList.remove('visible', 'glitching');
+
+                successIcon.classList.add('hidden');
+
+                failureIcon.classList.add('hidden');
+
+                resetButton.classList.remove('visible');
+
+                resultText.innerHTML = '';
+
+                form.style.display = 'block';
+
+                verifyButton.disabled = false;
+
+                verifyButton.textContent = 'Verify';
+
+                tokenInput.value = '';
+
+                validToken = null; // Invalidate the token
+
+                tokenDisplay.textContent = '';
+
+            }
+
+
+
+            function generateNewToken() {
+
+                const chars = 'abcdef0123456789';
+
+                let token = '0x';
+
+                for (let i = 0; i < 40; i++) { token += chars.charAt(Math.floor(Math.random() * chars.length)); }
+
+                return token;
+
+            }
+
+
+
+            generateTokenBtn.addEventListener('click', () => {
+
+                if (soundsReady) synths.tick.triggerAttackRelease("C5", "8n");
+
+                validToken = generateNewToken();
+
+                tokenDisplay.textContent = validToken;
+
+                tokenInput.value = validToken;
+
+            });
+
+
+
+            verifyButton.addEventListener('click', () => {
+
+                const tokenId = tokenInput.value.trim();
+
+                if (!tokenId) {
+
+                    tokenInput.style.borderColor = 'var(--failure-glow)';
+
+                    setTimeout(() => { tokenInput.style.borderColor = '' }, 1000);
+
+                    return;
+
+                }
+
+                lastVerifiedToken = tokenId;
+
+                if(soundsReady) synths.tick.triggerAttackRelease("C6", "8n");
+
+                const isValid = (tokenId === validToken && tokenId !== null);
+
+                startAnimation(isValid);
+
+            });
+
+            
+
+            resetButton.addEventListener('click', () => {
+
+                if(soundsReady) synths.tick.triggerAttackRelease("C5", "8n");
+
+                resetState();
+
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>

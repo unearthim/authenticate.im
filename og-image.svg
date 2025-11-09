@@ -1,0 +1,30 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="630" fill="#0A0E1B"/>
+    <defs>
+        <linearGradient id="gridGradient" x1="0" y1="0" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(125, 249, 255, 0.05)" stroke-width="1"/>
+        </linearGradient>
+        <pattern id="gridPattern" patternUnits="userSpaceOnUse" width="20" height="20">
+            <rect width="20" height="20" fill="url(#gridGradient)"/>
+        </pattern>
+    </defs>
+    <rect width="1200" height="630" fill="url(#gridPattern)"/>
+    
+    <g filter="url(#glow)">
+        <text x="50%" y="280" font-family="'Share Tech Mono', monospace" font-size="60" fill="#7DF9FF" text-anchor="middle" letter-spacing="2px">
+            Certificate of Provenance
+        </text>
+    </g>
+    
+    <text x="50%" y="360" font-family="'Share Tech Mono', monospace" font-size="24" fill="rgba(125, 249, 255, 0.75)" text-anchor="middle" letter-spacing="0.5px">
+        Immutable proof for digital assets.
+    </text>
+
+    <text x="50%" y="580" font-family="'Share Tech Mono', monospace" font-size="28" fill="#7DF9FF" text-anchor="middle" letter-spacing="1px">
+        authenticate.im
+    </text>
+    <filter id="glow">
+        <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+</svg>

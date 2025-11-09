@@ -1,0 +1,10 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="64" height="64" fill="#0A0E1B"/>
+    <g filter="url(#glow)">
+        <path d="M20 34L28.8235 41.8095L48.1176 25" stroke="#7DF9FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <filter id="glow">
+        <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+</svg>
