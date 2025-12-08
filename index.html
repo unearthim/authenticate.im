@@ -47,6 +47,79 @@
     <meta name="theme-color" content="#0A0E1B">
     <meta name="msapplication-TileColor" content="#7DF9FF">
     
+    <!-- === 6. Schema.org JSON-LD === -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          // --- THE ARTWORK (Variable Content) ---
+          "@type": "VisualArtwork", 
+          "@id": "https://authenticate.im/#artwork",
+          "url": "https://authenticate.im",
+          "name": "Certificate of Provenance",
+          "headline": "An interactive visualization of cryptographic verification for digital assets.",
+          "description": "Authenticate.im visualizes cryptographic verification, providing immutable proof of provenance for digital assets by validating their unique identifiers. This project is part of the unearth.im collection.",
+          "image": "https://authenticate.im/og-image.png",
+          "artMedium": "Interactive JavaScript (Canvas)",
+          "artForm": "Digital Monument",
+          "genre": "Interactive Art",
+          "copyrightYear": "2025",
+          "inLanguage": "en-US",
+    
+          // --- THE CHAIN OF CUSTODY (Immutable Infrastructure) ---
+          "author": [
+            { "@id": "https://josiest.com/#person" },
+            { "@id": "https://felixvelas.co/#person" }
+          ],
+          "creator": [
+            { "@id": "https://josiest.com/#person" },
+            { "@id": "https://felixvelas.co/#person" }
+          ],
+          "publisher": { "@id": "https://unearth.im/#organization" },
+          "isPartOf": { "@id": "https://unearth.im/#collection" },
+          "mainEntityOfPage": { "@id": "https://authenticate.im/#website" }
+        },
+        {
+          // --- THE WEBSITE CONTAINER ---
+          "@type": "WebSite",
+          "@id": "https://authenticate.im/#website",
+          "url": "https://authenticate.im",
+          "name": "Certificate of Provenance | Authenticate.im",
+          "publisher": { "@id": "https://unearth.im/#organization" }
+        },
+        // --- THE SOVEREIGN ENTITIES (Immutable Core) ---
+        {
+          "@type": "Organization",
+          "@id": "https://unearth.im/#organization",
+          "name": "unearth.im",
+          "url": "https://unearth.im",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://unearth.im/favicon-32x32.png"
+          }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://josiest.com/#person",
+          "name": "Josie Jefferson",
+          "url": "https://josiest.com",
+          "jobTitle": "Digital Archaeologist",
+          "sameAs": [ "https://notjojo.im", "https://notjojo.org" ], 
+          "affiliation": { "@id": "https://unearth.im/#organization" }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://felixvelas.co/#person",
+          "name": "Felix Velasco",
+          "url": "https://felixvelas.co",
+          "jobTitle": "Trust Architect",
+          "affiliation": { "@id": "https://unearth.im/#organization" }
+        }
+      ]
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
