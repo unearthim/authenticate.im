@@ -10,24 +10,27 @@
     <title>Certificate of Provenance | Authenticate.im</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="title" content="Certificate of Provenance | Authenticate.im">
-    <meta name="description" content="Authenticate.im visualizes cryptographic verification, providing immutable proof of provenance for digital assets by validating their unique identifiers.">
-    <meta name="keywords" content="cryptographic verification, provenance, digital asset, authentication, immutable proof, NFT, blockchain, security, transparency">
+    <meta name="description"
+        content="Authenticate.im visualizes cryptographic verification, providing immutable proof of provenance for digital assets by validating their unique identifiers.">
+    <meta name="keywords"
+        content="cryptographic verification, provenance, digital asset, authentication, immutable proof, NFT, blockchain, security, transparency">
     <meta name="author" content="authenticate.im (by unearth heritage foundry - archive & anvil - unearth.im)">
     <meta name="robots" content="index, follow">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="language" content="English">
-    
+
     <!--- NON-NEGOTIABLE AND IMPORTANT:CANONICAL LINKS: if page-url.html is index.html, no need to attach it at the end of link--->
     <link rel="canonical" href="https://authenticate.im" />
-  
+
     <!-- === 2. Webmention Endpoint === -->
     <link rel="webmention" href="https://webmention.io/unearth.im/webmention" />
 
     <!-- === 3. Open Graph / Facebook === -->
-    <meta property="og:type" content="website"> 
+    <meta property="og:type" content="website">
     <meta property="og:url" content="https://authenticate.im/">
     <meta property="og:title" content="Certificate of Provenance | Authenticate.im">
-    <meta property="og:description" content="Authenticate.im visualizes cryptographic verification, providing immutable proof of provenance for digital assets by validating their unique identifiers.">
+    <meta property="og:description"
+        content="Authenticate.im visualizes cryptographic verification, providing immutable proof of provenance for digital assets by validating their unique identifiers.">
     <meta property="og:image" content="https://authenticate.im/og-image.png">
     <meta property="og:site_name" content="Authenticate.im">
 
@@ -35,7 +38,8 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://authenticate.im/">
     <meta property="twitter:title" content="Certificate of Provenance | Authenticate.im">
-    <meta property="twitter:description" content="Authenticate.im visualizes cryptographic verification, providing immutable proof of provenance for digital assets by validating their unique identifiers.">
+    <meta property="twitter:description"
+        content="Authenticate.im visualizes cryptographic verification, providing immutable proof of provenance for digital assets by validating their unique identifiers.">
     <meta property="twitter:image" content="https://authenticate.im/og-image.png">
 
     <!-- === 5. Favicons === -->
@@ -46,7 +50,7 @@
     <!-- Brand Color Meta Tags -->
     <meta name="theme-color" content="#0A0E1B">
     <meta name="msapplication-TileColor" content="#7DF9FF">
-    
+
     <!-- === 6. Schema.org JSON-LD === -->
     <script type="application/ld+json">
     {
@@ -93,7 +97,7 @@
           "@type": "Organization",
           "@id": "https://unearth.im/#organization",
           "name": "Unearth Heritage Foundry",
-"alternateName": ["Unearth Foundry", "Archive & Anvil"],
+"alternateName": ["Unearth Foundry","Archive & Anvil","Unearth Anvil","Unearth Works","Cultural Infrastructure Foundry"],
           "url": "https://unearth.im",
           "logo": {
             "@type": "ImageObject",
@@ -130,7 +134,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
 
     <style>
-
         :root {
 
             --background-color: #0A0E1B;
@@ -169,7 +172,7 @@
 
             background-image: linear-gradient(rgba(125, 249, 255, 0.03) 1px, transparent 1px),
 
-                              linear-gradient(90deg, rgba(125, 249, 255, 0.03) 1px, transparent 1px);
+                linear-gradient(90deg, rgba(125, 249, 255, 0.03) 1px, transparent 1px);
 
             background-size: 20px 20px;
 
@@ -205,7 +208,7 @@
 
         }
 
-        
+
 
         .certificate-container.hidden {
 
@@ -347,7 +350,7 @@
 
         }
 
-        
+
 
         .action-button {
 
@@ -385,27 +388,34 @@
 
         }
 
-        
+
 
         @keyframes pulse-glow {
 
-            0%, 100% { box-shadow: 0 0 10px rgba(125, 249, 255, 0.3); }
+            0%,
+            100% {
+                box-shadow: 0 0 10px rgba(125, 249, 255, 0.3);
+            }
 
-            50% { box-shadow: 0 0 20px rgba(125, 249, 255, 0.6); }
+            50% {
+                box-shadow: 0 0 20px rgba(125, 249, 255, 0.6);
+            }
 
         }
 
 
 
-        .action-button:hover, .action-button:focus {
+        .action-button:hover,
+        .action-button:focus {
 
             background-color: rgba(125, 249, 255, 0.1);
 
-            box-shadow: 0 0 20px rgba(125, 249, 255, 0.6) !important; /* Override pulse */
+            box-shadow: 0 0 20px rgba(125, 249, 255, 0.6) !important;
+            /* Override pulse */
 
         }
 
-        
+
 
         .action-button:disabled {
 
@@ -415,7 +425,7 @@
 
         }
 
-        
+
 
         .reset-btn {
 
@@ -429,11 +439,12 @@
 
             opacity: 0;
 
-            transition: opacity 0.5s ease 1s; /* Fade in after icon animation */
+            transition: opacity 0.5s ease 1s;
+            /* Fade in after icon animation */
 
         }
 
-        
+
 
         .reset-btn.visible {
 
@@ -441,7 +452,7 @@
 
         }
 
-        
+
 
         .reset-btn.failure {
 
@@ -491,7 +502,7 @@
 
         }
 
-        
+
 
         #result-text {
 
@@ -547,13 +558,18 @@
 
         @keyframes blink {
 
-            0%, 100% { opacity: 1; }
+            0%,
+            100% {
+                opacity: 1;
+            }
 
-            50% { opacity: 0; }
+            50% {
+                opacity: 0;
+            }
 
         }
 
-        
+
 
         .icon {
 
@@ -573,7 +589,7 @@
 
         }
 
-        
+
 
         .icon.visible {
 
@@ -609,7 +625,11 @@
 
 
 
-        @keyframes draw-check { to { stroke-dashoffset: 0; } }
+        @keyframes draw-check {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
 
 
 
@@ -623,7 +643,7 @@
 
         }
 
-        
+
 
         #failure-icon.glitching {
 
@@ -635,13 +655,22 @@
 
         @keyframes jitter {
 
-            0%, 100% { transform: translate(0, 0) scale(1); }
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
 
-            25% { transform: translate(2px, -1px) scale(1.02); }
+            25% {
+                transform: translate(2px, -1px) scale(1.02);
+            }
 
-            50% { transform: translate(-1px, 2px) scale(0.98); }
+            50% {
+                transform: translate(-1px, 2px) scale(0.98);
+            }
 
-            75% { transform: translate(1px, -2px) scale(1); }
+            75% {
+                transform: translate(1px, -2px) scale(1);
+            }
 
         }
 
@@ -665,11 +694,17 @@
 
 
 
-        @keyframes draw-cross { to { stroke-dashoffset: 0; } }
+        @keyframes draw-cross {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
 
 
 
-        .hidden { display: none; }
+        .hidden {
+            display: none;
+        }
 
 
 
@@ -712,7 +747,6 @@
             text-shadow: 0 0 5px var(--accent-glow);
 
         }
-
     </style>
 
 </head>
@@ -729,11 +763,12 @@
 
         <p class="tagline">
 
-            Authenticate.im visualizes cryptographic verification. This certificate provides immutable proof of provenance for a digital asset by validating its unique identifier.
+            Authenticate.im visualizes cryptographic verification. This certificate provides immutable proof of
+            provenance for a digital asset by validating its unique identifier.
 
         </p>
 
-        
+
 
         <div class="explanation-section">
 
@@ -741,11 +776,15 @@
 
             <p>
 
-                In the digital age, true ownership is fragile. Traditional verification relies on centralized authorities, creating single points of failure susceptible to manipulation and fraud. Certificates can be forged, records altered, and digital identities compromised.
+                In the digital age, true ownership is fragile. Traditional verification relies on centralized
+                authorities, creating single points of failure susceptible to manipulation and fraud. Certificates can
+                be forged, records altered, and digital identities compromised.
 
                 <br><br>
 
-                Cryptographic verification represents a paradigm shift. By creating unchangeable, publicly verifiable records, we establish a new foundation for a secure and transparent digital world—where identity and ownership are absolute.
+                Cryptographic verification represents a paradigm shift. By creating unchangeable, publicly verifiable
+                records, we establish a new foundation for a secure and transparent digital world—where identity and
+                ownership are absolute.
 
             </p>
 
@@ -755,13 +794,15 @@
 
         <div id="verification-form">
 
-            <input type="text" id="token-input" class="input-field" placeholder="Enter any text to see it fail, or generate a valid token">
+            <input type="text" id="token-input" class="input-field"
+                placeholder="Enter any text to see it fail, or generate a valid token">
 
             <button id="verify-button" class="action-button verify-btn">Verify</button>
 
             <div id="generate-token-container" class="mt-6 text-center">
 
-                <button id="generate-token-btn" class="text-sm text-cyan-400/70 hover:text-cyan-400 transition-colors underline">
+                <button id="generate-token-btn"
+                    class="text-sm text-cyan-400/70 hover:text-cyan-400 transition-colors underline">
 
                     Generate a valid token for this demo
 
@@ -781,19 +822,19 @@
 
             <svg id="success-icon" class="icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
 
-                <circle cx="26" cy="26" r="25" fill="none"/>
+                <circle cx="26" cy="26" r="25" fill="none" />
 
-                <path class="check" d="M14 27l5.917 4.93L38.083 22" fill="none"/>
+                <path class="check" d="M14 27l5.917 4.93L38.083 22" fill="none" />
 
             </svg>
 
             <svg id="failure-icon" class="icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
 
-                <circle cx="26" cy="26" r="25" fill="none"/>
+                <circle cx="26" cy="26" r="25" fill="none" />
 
-                <path class="cross" d="M16 16 36 36" fill="none"/>
+                <path class="cross" d="M16 16 36 36" fill="none" />
 
-                <path class="cross" d="M36 16 16 36" fill="none"/>
+                <path class="cross" d="M36 16 16 36" fill="none" />
 
             </svg>
 
@@ -805,8 +846,11 @@
 
         <footer id="page-footer">
             <small>
-                a <b><a href="https://sentientification.com" target="_blank" rel="noopener noreferrer" class="footer-link">liminal mind meld</a></b> collaboration:<br>
-                digital monument by <b><a href="https://unearth.im" target="_blank" rel="noopener noreferrer" class="footer-link">unearth.im</a></b> | <b><a href="https://archaeobytology.org" target="_blank" rel="noopener noreferrer" class="footer-link">archive & anvil</a></b>
+                a <b><a href="https://sentientification.com" target="_blank" rel="noopener noreferrer"
+                        class="footer-link">liminal mind meld</a></b> collaboration:<br>
+                digital monument by <b><a href="https://unearth.im" target="_blank" rel="noopener noreferrer"
+                        class="footer-link">unearth.im</a></b> | <b><a href="https://archaeobytology.org"
+                        target="_blank" rel="noopener noreferrer" class="footer-link">archive & anvil</a></b>
             </small>
         </footer>
 
@@ -842,7 +886,7 @@
 
             const resetButton = document.getElementById('reset-button');
 
-            
+
 
             // Canvas Elements
 
@@ -894,7 +938,7 @@
 
             }, { once: true });
 
-            
+
 
             tokenInput.addEventListener('focus', () => soundsReady && synths.tick.triggerAttackRelease("C5", "8n"));
 
@@ -926,17 +970,17 @@
 
             let particles = [], checkmarks = [], redXs = [];
 
-            class Particle { constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*2+1;this.speedX=Math.random()*3-1.5;this.speedY=Math.random()*3-1.5;this.color='#7DF9FF'}update(){this.x+=this.speedX;this.y+=this.speedY;if(this.size>0.2)this.size-=0.1}draw(){ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill()}}
+            class Particle { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 1; this.speedX = Math.random() * 3 - 1.5; this.speedY = Math.random() * 3 - 1.5; this.color = '#7DF9FF' } update() { this.x += this.speedX; this.y += this.speedY; if (this.size > 0.2) this.size -= 0.1 } draw() { ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill() } }
 
-            class Checkmark { constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*10+10;this.opacity=1;this.life=0}draw(){ctx.save();ctx.strokeStyle=`rgba(0, 255, 0, ${this.opacity})`;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(this.x,this.y);ctx.lineTo(this.x+this.size*.4,this.y+this.size*.4);ctx.lineTo(this.x+this.size,this.y-this.size*.3);ctx.stroke();ctx.restore()}update(){this.life++;if(this.life>20)this.opacity-=.05}}
+            class Checkmark { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 10 + 10; this.opacity = 1; this.life = 0 } draw() { ctx.save(); ctx.strokeStyle = `rgba(0, 255, 0, ${this.opacity})`; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x + this.size * .4, this.y + this.size * .4); ctx.lineTo(this.x + this.size, this.y - this.size * .3); ctx.stroke(); ctx.restore() } update() { this.life++; if (this.life > 20) this.opacity -= .05 } }
 
-            class RedX { constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*15+10;this.opacity=1;this.life=0}draw(){ctx.save();ctx.strokeStyle=`rgba(255,45,45,${this.opacity})`;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(this.x-this.size/2,this.y-this.size/2);ctx.lineTo(this.x+this.size/2,this.y+this.size/2);ctx.moveTo(this.x+this.size/2,this.y-this.size/2);ctx.lineTo(this.x-this.size/2,this.y+this.size/2);ctx.stroke();ctx.restore()}update(){this.life++;if(this.life>20)this.opacity-=.05}}
+            class RedX { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 15 + 10; this.opacity = 1; this.life = 0 } draw() { ctx.save(); ctx.strokeStyle = `rgba(255,45,45,${this.opacity})`; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(this.x - this.size / 2, this.y - this.size / 2); ctx.lineTo(this.x + this.size / 2, this.y + this.size / 2); ctx.moveTo(this.x + this.size / 2, this.y - this.size / 2); ctx.lineTo(this.x - this.size / 2, this.y + this.size / 2); ctx.stroke(); ctx.restore() } update() { this.life++; if (this.life > 20) this.opacity -= .05 } }
 
-            function handleParticles(){for(let i=0;i<5;i++){particles.push(new Particle())}for(let i=0;i<particles.length;i++){particles[i].update();particles[i].draw();for(let j=i;j<particles.length;j++){const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,distance=Math.sqrt(dx*dx+dy*dy);if(distance<100){ctx.beginPath();ctx.strokeStyle=particles[i].color;ctx.lineWidth=.2;ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.stroke()}}if(particles[i].size<=.2){particles.splice(i,1);i--}}}
+            function handleParticles() { for (let i = 0; i < 5; i++) { particles.push(new Particle()) } for (let i = 0; i < particles.length; i++) { particles[i].update(); particles[i].draw(); for (let j = i; j < particles.length; j++) { const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, distance = Math.sqrt(dx * dx + dy * dy); if (distance < 100) { ctx.beginPath(); ctx.strokeStyle = particles[i].color; ctx.lineWidth = .2; ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke() } } if (particles[i].size <= .2) { particles.splice(i, 1); i-- } } }
 
-            function handleCheckmarks(){if(checkmarks.length<50&&Math.random()>.5){checkmarks.push(new Checkmark())}for(let i=0;i<checkmarks.length;i++){checkmarks[i].update();checkmarks[i].draw();if(checkmarks[i].opacity<=0){checkmarks.splice(i,1);i--}}}
+            function handleCheckmarks() { if (checkmarks.length < 50 && Math.random() > .5) { checkmarks.push(new Checkmark()) } for (let i = 0; i < checkmarks.length; i++) { checkmarks[i].update(); checkmarks[i].draw(); if (checkmarks[i].opacity <= 0) { checkmarks.splice(i, 1); i-- } } }
 
-            function handleRedXs(){if(redXs.length<50&&Math.random()>.5){redXs.push(new RedX())}for(let i=0;i<redXs.length;i++){redXs[i].update();redXs[i].draw();if(redXs[i].opacity<=0){redXs.splice(i,1);i--}}}
+            function handleRedXs() { if (redXs.length < 50 && Math.random() > .5) { redXs.push(new RedX()) } for (let i = 0; i < redXs.length; i++) { redXs[i].update(); redXs[i].draw(); if (redXs[i].opacity <= 0) { redXs.splice(i, 1); i-- } } }
 
             function handleGlitchEffect() {
 
@@ -956,15 +1000,15 @@
 
             }
 
-            
+
 
             let animationPhase = '', phaseTimer = 0, verificationResult = true;
 
-            function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);phaseTimer++;if(animationPhase==='handshake'){handleParticles();if(phaseTimer>120){phaseTimer=0;animationPhase=verificationResult?'cascade':'failure'}}else if(animationPhase==='cascade'){handleCheckmarks();if(phaseTimer>150){stopAnimationAndShowResult();return}}else if(animationPhase==='failure'){handleRedXs();handleGlitchEffect();if(phaseTimer>150){stopAnimationAndShowResult();return}}animationFrameId=requestAnimationFrame(animate)}
+            function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); phaseTimer++; if (animationPhase === 'handshake') { handleParticles(); if (phaseTimer > 120) { phaseTimer = 0; animationPhase = verificationResult ? 'cascade' : 'failure' } } else if (animationPhase === 'cascade') { handleCheckmarks(); if (phaseTimer > 150) { stopAnimationAndShowResult(); return } } else if (animationPhase === 'failure') { handleRedXs(); handleGlitchEffect(); if (phaseTimer > 150) { stopAnimationAndShowResult(); return } } animationFrameId = requestAnimationFrame(animate) }
 
-            function startAnimation(isValid){verificationResult=isValid;verifyButton.disabled=true;verifyButton.textContent='Verifying...';certificateContainer.classList.add('hidden');setTimeout(()=>{canvas.style.display='block';animationPhase='handshake';phaseTimer=0;particles=[];checkmarks=[];redXs=[];animate()},500)}
+            function startAnimation(isValid) { verificationResult = isValid; verifyButton.disabled = true; verifyButton.textContent = 'Verifying...'; certificateContainer.classList.add('hidden'); setTimeout(() => { canvas.style.display = 'block'; animationPhase = 'handshake'; phaseTimer = 0; particles = []; checkmarks = []; redXs = []; animate() }, 500) }
 
-            function stopAnimationAndShowResult(){cancelAnimationFrame(animationFrameId);canvas.style.display='none';certificateContainer.classList.remove('hidden');form.style.display = 'none';showResult(verificationResult)}
+            function stopAnimationAndShowResult() { cancelAnimationFrame(animationFrameId); canvas.style.display = 'none'; certificateContainer.classList.remove('hidden'); form.style.display = 'none'; showResult(verificationResult) }
 
 
 
@@ -972,9 +1016,10 @@
 
             function typeWriter(text, isSuccess, i = 0) {
 
-                if(i===0){resultText.innerHTML='';const c=document.createElement('span');c.className='typing-cursor';resultText.appendChild(c)}
+                if (i === 0) { resultText.innerHTML = ''; const c = document.createElement('span'); c.className = 'typing-cursor'; resultText.appendChild(c) }
 
-                if(i<text.length){const c=document.querySelector('.typing-cursor');resultText.insertBefore(document.createTextNode(text.charAt(i)),c);setTimeout(()=>typeWriter(text,isSuccess,i+1),50)}else{const c=document.querySelector('.typing-cursor');if(c)c.remove();setTimeout(()=>{if(isSuccess){successIcon.classList.remove('hidden');successIcon.classList.add('visible');if(soundsReady)synths.success.triggerAttackRelease(["C4","E4","G4"],"4n")}else{failureIcon.classList.remove('hidden');failureIcon.classList.add('visible','glitching');if(soundsReady)synths.failure.triggerAttackRelease("2n")}resetButton.classList.add('visible')},300)}}
+                if (i < text.length) { const c = document.querySelector('.typing-cursor'); resultText.insertBefore(document.createTextNode(text.charAt(i)), c); setTimeout(() => typeWriter(text, isSuccess, i + 1), 50) } else { const c = document.querySelector('.typing-cursor'); if (c) c.remove(); setTimeout(() => { if (isSuccess) { successIcon.classList.remove('hidden'); successIcon.classList.add('visible'); if (soundsReady) synths.success.triggerAttackRelease(["C4", "E4", "G4"], "4n") } else { failureIcon.classList.remove('hidden'); failureIcon.classList.add('visible', 'glitching'); if (soundsReady) synths.failure.triggerAttackRelease("2n") } resetButton.classList.add('visible') }, 300) }
+            }
 
 
 
@@ -992,19 +1037,19 @@
 
                 failureIcon.classList.add('hidden');
 
-                
+
 
                 let validationText;
 
-                if(isSuccess){validationText = `Token Verified:\n${lastVerifiedToken}\n\nThis token is valid.`}
+                if (isSuccess) { validationText = `Token Verified:\n${lastVerifiedToken}\n\nThis token is valid.` }
 
-                else{validationText = `Integrity Check Failed: Incoherent Data Stream\n\nToken provided:\n${lastVerifiedToken}\n\nPlease enter a valid token to restore system coherence.`;resultText.classList.add('failure');resetButton.classList.add('failure')}
+                else { validationText = `Integrity Check Failed: Incoherent Data Stream\n\nToken provided:\n${lastVerifiedToken}\n\nPlease enter a valid token to restore system coherence.`; resultText.classList.add('failure'); resetButton.classList.add('failure') }
 
                 typeWriter(validationText, isSuccess);
 
             }
 
-            
+
 
             function resetState() {
 
@@ -1082,7 +1127,7 @@
 
                 lastVerifiedToken = tokenId;
 
-                if(soundsReady) synths.tick.triggerAttackRelease("C6", "8n");
+                if (soundsReady) synths.tick.triggerAttackRelease("C6", "8n");
 
                 const isValid = (tokenId === validToken && tokenId !== null);
 
@@ -1090,11 +1135,11 @@
 
             });
 
-            
+
 
             resetButton.addEventListener('click', () => {
 
-                if(soundsReady) synths.tick.triggerAttackRelease("C5", "8n");
+                if (soundsReady) synths.tick.triggerAttackRelease("C5", "8n");
 
                 resetState();
 
